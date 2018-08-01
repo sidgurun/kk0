@@ -31,13 +31,13 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="LyaRT_Grid",
-    version="0.1.1",
-    author="Example Author",
-    author_email="author@example.com",
-    description="A small example package",
+    version="0.1.3",
+    author="Siddhartha Gurung Lopez",
+    author_email="sidgurung@cefca.es",
+    description="Fast Lyman alpha Radiative Transfer for everyone!",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="https://github.com/pypa/example-project",
+    url="https://github.com/sidgurun/LyaRT-Grid",
     packages=setuptools.find_packages(),
     #install_requires=['scikit-learn'],
     install_requires=setuptools.find_packages(),
