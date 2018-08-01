@@ -55,7 +55,7 @@ Lya.Print_the_grid_edges()
 
 ### Predicting thousands of Lyman alpha escape fractions.
 
-Let's move to the easiest and one of the most powerfull products of `LyaRT;Grid`: predicting huge amounts of Lyman alpha escape fractions. 
+Let's move to one of the most powerfull products of `LyaRT;Grid`: predicting huge amounts of Lyman alpha escape fractions. 
 
 In theory only one line is needed to predict the escape fraction for a thin shell geometry with expasion velocity (V) of 200km/s, logarithmic of column density (logNH) of 19.5 and dust optical depth (ta) of 0.1 :
 
@@ -79,7 +79,9 @@ ta_Arr    = [  0.1 , 0.01 , 0.001 ] # Dust optical depth Array
 f_esc_Arr = Lya.RT_f_esc( Geometry , V_Arr , logNH_Arr , ta_Arr ) 
 ```  
 
-The variable `f_esc_Arr` is an Array of 1 dimension and length 3 that encloses the escape fractions for the configurations. If the user wants to change the outflow gas geometry just do
+The variable `f_esc_Arr` is an Array of 1 dimension and length 3 that encloses the escape fractions for the configurations. In particular `f_esc_Arr[i]` is computed using `V_Arr[i]` ,  `logNH_Arr[i]` and `ta_Arr[i]`.
+
+If the user wants to change the outflow gas geometry just do
 
 ```python
 Geometry = 'Galactic Wind' # Other options: 'Thin Shell' or 'Bicone_X_Slab'
@@ -107,7 +109,6 @@ f_esc_Arr = Lya.RT_f_esc( Geometry , V_Arr , logNH_Arr , ta_Arr , Inside_Bicone_
 
 #### Deeper options on predictint the escape fraction (Unuseful section?).
 
-
 There are many algorithims implemented to compute `f_esc_Arr` and by default `LyaRT;Grid` uses machine learning decision tree regressor and a parametric equation for the escape fraction as a function of the dust optical depth (Go to the `LyaRT;Grid` presentation paper Gurung-Lopez et al. in prerp for more information). These settings were chosen as default since they give the best performance. However the user might want to change the computing algorithim so here there is a guide with all the options available.
 
 + `MODE` variable refers to mode in which the escape fraction is computed. There are 3 ways in which `LyaRT;Grid` can compute this. i) `'Raw'` Using the raw data from the RTMC (Orsi et al. 2012). ii) `'Parametrization'` Assume a parametruc equation between the escape fraction and the dust optical depth that allow the extend the calculation outside the grid with the highest accuracy (in `LyaRT;Grid`). iii) `'Analytic'` Use of the recalibrated analytic equations presented by Gurung-Lopez et al. 2018. Note that the analytic mode is not able in the bicone geometry although it is in the `'Thin_Shel'` and `'Galactic_Wind'`
@@ -127,44 +128,35 @@ f_esc_Arr = Lya.RT_f_esc( Geometry , V_Arr , logNH_Arr , ta_Arr , MODE=MODE )
 
 Finally, any combination of `MODE` , `Algorithm` and `Machine_Learning_Algorithm` is allowed. However, note that the variable `Machine_Learning_Algorithm` is useless if `Algorithm='Intrepolation'`.
 
+
 ### Predicting thousands of Lyman alpha escape fractions.
 
-Alternatively, for H1 and H2, an underline-ish style:
-
-Alt-H1
-======
-
-Alt-H2
-------
-
-Emphasis, aka italics, with *asterisks* or _underscores_.
-
-Strong emphasis, aka bold, with **asterisks** or __underscores__.
-
-Combined emphasis with **asterisks and _underscores_**.
-
-Strikethrough uses two tildes. ~~Scratch this.~~
-
-1. First ordered list item
-2. Another item
-⋅⋅* Unordered sub-list. 
-1. Actual numbers don't matter, just that it's a number
-⋅⋅1. Ordered sub-list
-4. And another item.
-
-⋅⋅⋅You can have properly indented paragraphs within list items. Notice the blank line above, and the leading spaces (at least one, but we'll use three here to also align the raw Markdown).
-
-⋅⋅⋅To have a line break without a paragraph, you will need to use two trailing spaces.⋅⋅
-⋅⋅⋅Note that this line is separate, but within the same paragraph.⋅⋅
-⋅⋅⋅(This is contrary to the typical GFM line break behaviour, where trailing spaces are not required.)
-
-* Unordered list can use asterisks
-- Or minuses
-+ Or pluses
-
-Inline `code` has `back-ticks around` it.
+In this section we explain how to obtain in a fast way and arbitray number of Lyman alpha line porfiles. The syntaxis is very similar to the escape fraction functions. The main difference is that the user must provide a wavelength array (in meters) where the line profile will be evaluated. The line profile of a thin shell outfow with expansion velocity (V) 200 km/s, logarithmic of column density (logNH) of 19.5 and dust optical depth (ta) of 0.1 in 20 amstrongs arround Lyman alpha can be computed as
 
 ```python
-s = "Python syntax highlighting"
-print s
+wavelength_Arr = np.linspace( 1215.68 - 20 , 1215.68 + 20 , 1000 ) * 1e-10 # meters, please!
+
+Line_profile_Arr = Lya.RT_Line_Profile( 'Thin_Shell' , wavelength_Arr , [ 200 ] , [ 19.5 ] , [ 0.1 ] )
 ```
+
+As in the case of the escape fraction, in order to compute multiple line profiles at the same time just make
+
+```python
+wavelength_Arr = np.linspace( 1215.68 - 20 , 1215.68 + 20 , 1000 ) * 1e-10 # meters, please!
+
+V_Arr     = [  200 ,  300 , 400   ] # Expansion velocity array in km/s
+
+logNH_Arr = [ 19.5 , 20.0 , 20.5  ] # Logarithmic of column densities array in cm**-2
+
+ta_Arr    = [  0.1 , 0.01 , 0.001 ] # Dust optical depth Array
+
+Line_profile_Arr = Lya.RT_Line_Profile( 'Thin_Shell' , wavelength_Arr , [ 200 ] , [ 19.5 ] , [ 0.1 ] )
+```
+
+
+In this case, `Line_profile_Arr` is an array with shape (3,1000) that contains the computed line profiles. In particular `Line_profile_Arr[i,:]` is the ine profile evaluated in `wavelength_Arr` computed with `V_Arr[i]` ,  `logNH_Arr[i]` and `ta_Arr[i]`. 
+
+The other geometries (`'Galactic_Wind'` or `'Bicone_X_Slab'`) are also implemented. In particular, in the biconical geometry it is also possible to chose a line of sight observations. This is implemented in the same way as in the escape fraction. 
+
+
+In opposite to escape fraction calculations, the line profile only supports by now lineal interpolation between the pre-computed grids. Machine learning or deep learning might be implement in a future.
