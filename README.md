@@ -1,15 +1,46 @@
-<<<<<<< HEAD
-<<<<<<< HEAD
-# Example Package
+# H1
+## H2
+### H3
+#### H4
+##### H5
+###### H6
 
-This is a simple example package. You can use BLABLABLABLA
-[Github-flavored Markdown](http://https://guides.github.com/features/mastering-markdown/)
-to write your content.
-=======
-# LyaRTGrid
-A fast cream
->>>>>>> 5a03379fbd49a91141859a20a01638eb1fcbfed8
-=======
-# LyaRT_Grid
-# LyaRT_Grid
->>>>>>> dcb6f0665197b4a0be5e5877e744c11cede053c1
+Alternatively, for H1 and H2, an underline-ish style:
+
+Alt-H1
+======
+
+Alt-H2
+------
+
+Emphasis, aka italics, with *asterisks* or _underscores_.
+
+Strong emphasis, aka bold, with **asterisks** or __underscores__.
+
+Combined emphasis with **asterisks and _underscores_**.
+
+Strikethrough uses two tildes. ~~Scratch this.~~
+
+1. First ordered list item
+2. Another item
+⋅⋅* Unordered sub-list. 
+1. Actual numbers don't matter, just that it's a number
+⋅⋅1. Ordered sub-list
+4. And another item.
+
+⋅⋅⋅You can have properly indented paragraphs within list items. Notice the blank line above, and the leading spaces (at least one, but we'll use three here to also align the raw Markdown).
+
+⋅⋅⋅To have a line break without a paragraph, you will need to use two trailing spaces.⋅⋅
+⋅⋅⋅Note that this line is separate, but within the same paragraph.⋅⋅
+⋅⋅⋅(This is contrary to the typical GFM line break behaviour, where trailing spaces are not required.)
+
+* Unordered list can use asterisks
+- Or minuses
++ Or pluses
+
+Inline `code` has `back-ticks around` it.
+
+```python
+s = "Python syntax highlighting"
+print s
+```
