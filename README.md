@@ -1,7 +1,47 @@
-# H1
-## H2
-### H3
-#### H4
+# `LyaRT;Grid`
+
+In this Universe everything is neat, even stochasticity.
+Lyman alpha Resonant Scatter is dominated by random processes.
+Although there is chaos, there is also an order.
+
+## WARNING : THIS IS BETA VERSION! BUGS CAN BE FOUND, BE AWARE!
+
+### Origins and motivation
+
+Due to the Lyman alpha Radiative Transfer large complexity, the efforts of understanding it moved from pure analytic studies to the so-called radiative transfer Monte Carlo (RTMC) codes that by simulating Lyman alpha photons in arbitrary gas geometries. These codes provide useful information about the fraction of photons that manage to escape and the out coming lyman alpha line profiles. The RTMC approach has shown to reproduce the observed properties of LAEs.
+
+`LyaRT;Grid` is a publicly available `python` package based on a RTMC (Orsi et al. 2012) able to predict large amounts of Lyman alpha line profiles and escape fractions with high accuracy. We designed this code hoping that it helps researches all over the wolrd to get a better understanding of the Universe.
+
+The main premises of `LyaRT;Grid` are **fast** and **simple**. 
+
++ **Fast** : This code is able to predict Lyman alpha escape fractions and line profiles in an unprecedented low amount of time. In particular thousands of escape fractions and line profiles can be computed in less than a second of computational time. 
+
++ **Simple** : This code is *One-Line-Installing* and *One-Line-Running*. Everyone, from a good trained monkey, passing through undergrade studients, to researches with basic python knowlege should be able to use `LyaRT;Grid`.
+
+### Installation
+
+The easiest way to get `LyaRT;Grid` in your machine is through `pip`:
+
+`pip install LyaRT_Grid`
+
+This should do the trick. However, you can also install `LyaRT_Grid` downloading this repository and running
+
+`pip install .`
+
+in it.
+
+Please, note that you should have about 1GB of free memory in you machine in order to install `LyaRT_Grid`. Also note that as ~1GB of data has to be downloaded it might take some time depending on your internet conection.
+
+I don't like short installation guides, but really, there is nothing more to tell. However, if you find any trouble with installation please contact `sidgurung@cefca.es` or leave a comment. We will be pleased to help you! 
+ 
+### Hands on the code.
+
+( Assuming everything went smoothly in the installation... )
+
+**Congratulations!!** You have just become one of the few chosen ones in the history of humankind to have the great pleasure of using `LyaRT_Grid`.
+
+
+
 ##### H5
 ###### H6
 
