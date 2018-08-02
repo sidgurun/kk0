@@ -164,7 +164,7 @@ logNH_Arr = [ 19.5 , 20.0 , 20.5  ] # Logarithmic of column densities array in c
 
 ta_Arr    = [  0.1 , 0.01 , 0.001 ] # Dust optical depth Array
 
-Line_profile_Arr = Lya.RT_Line_Profile( 'Thin_Shell' , wavelength_Arr , [ 200 ] , [ 19.5 ] , [ 0.1 ] )
+Line_profile_Arr = Lya.RT_Line_Profile( 'Thin_Shell' , wavelength_Arr , V_Arr , logNH_Arr , ta_Arr )
 ```
 
 
