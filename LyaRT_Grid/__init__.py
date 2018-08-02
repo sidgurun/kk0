@@ -1252,6 +1252,11 @@ def RT_Line_Profile( Geometry , wavelength_Arr , V_Arr , logNH_Arr , ta_Arr , In
 
     return lines_Arr
 #====================================================================#
+#====================================================================#
+#====================================================================#
+#====================================================================#
+#====================================================================#
+#====================================================================#
 def Print_the_grid_edges():
 
     print ''
@@ -1279,7 +1284,235 @@ def Print_the_grid_edges():
 #====================================================================#
 #====================================================================#
 #====================================================================#
+def Test_1( ):
+    print '\nChecking if all the files are found...',
+    
+    bool_files = Check_if_DATA_files_are_found()
+    
+    print 'Done!'
+    
+    if bool_files :
+        print '    Every file was found. that is great!'
+    if not bool_files :
+        print '    Missing files.... Let us download them... ;)'
+    
+        Download_data()
+   
+    print '\n Now that we are sure that the data is downloaded in your machine...'
+
+    print '\n Let us check every different configuration for computing the escape fraction and the line profiles.'
+ 
+    Geometry_set = [ 'Thin_Shell' , 'Galactic_Wind' , 'Bicone_X_Slab' ]
+    
+    ML_codes_set = [ 'Tree' , 'Forest' , 'KN' ]
+    
+    MODE_set = [ 'Parametrization' , 'Raw' , 'Analytic' ]
+    
+    Algorithm_set = [ 'Intrepolation' , 'Machine_Learning' ]
+    
+    # Primero vamos a checkear que funciona las fracciones de escape
+    
+    N_points = int( 1e4 )
+    
+    V_Arr     = np.random.rand( N_points ) * 1000   + 0.0
+    logNH_Arr = np.random.rand( N_points ) *   5   + 17.0
+    logta_Arr = np.random.rand( N_points ) *   4.5 -  4.0
+    
+    In_Arr = np.random.rand( N_points ) > 0.5
+    
+    print '\nComputing', N_points , 'random configurations of escape fraction with each algorithms...\n'
+    
+    for Geo in Geometry_set:
+    
+        for Mod in MODE_set :
+    
+            if not Mod in [ 'Analytic' ]:
+    
+                for Algo in Algorithm_set:
+    
+                    if Algo in [ 'Intrepolation' , 'Machine_Learning' ]:
+    
+                        if Algo == 'Machine_Learning' :
+    
+                            for machine in ML_codes_set :
+    
+    
+                                try:
+                                    print '      Running : ' , Geo , Mod , Algo , machine ,
+                                    fff = RT_f_esc( Geo , V_Arr , logNH_Arr , 10**logta_Arr , Inside_Bicone_Arr=In_Arr , MODE=Mod , Algorithm=Algo , Machine_Learning_Algorithm=machine)
+                                    assert np.sum( np.isnan( fff ) ) == 0
+                                    print '--> Success!!'
+                                except:
+                                    print '--> ERROR. HUMAN IS DEAD. MISMATCH!!'
+    
+                        if Algo != 'Machine_Learning' :
+    
+    
+                                try:
+                                    print '      Running : ' , Geo , Mod , Algo ,
+                                    fff = RT_f_esc( Geo , V_Arr , logNH_Arr , 10**logta_Arr , Inside_Bicone_Arr=In_Arr , MODE=Mod , Algorithm=Algo )
+                                    assert np.sum( np.isnan( fff ) ) == 0
+                                    print '--> Success!!'
+    
+                                except:
+                                    print '--> ERROR. HUMAN IS DEAD. MISMATCH!!'
+    
+            if Mod in [ 'Analytic' ]:
+    
+    
+                                try:
+                                    print '      Running : ' , Geo , Mod ,
+                                    fff = RT_f_esc( Geo , V_Arr , logNH_Arr , 10**logta_Arr , MODE=Mod )
+                                    assert np.sum( np.isnan( fff ) ) == 0
+                                    print '--> Success!!'
+    
+                                except:
+                                    print '--> ERROR. HUMAN IS DEAD. MISMATCH!!'
+    
+    
+    
+    N_points = int( 1e3 )
+    
+    print '\nComputing', N_points , 'random configurations of line profile  with each algorithms...\n'
+    
+    V_Arr     = np.random.rand( N_points ) * 1000   + 0
+    logNH_Arr = np.random.rand( N_points ) *   5   + 17.0
+    logta_Arr = np.random.rand( N_points ) *   5.5 -  4.75
+    
+    In_Arr = np.random.rand( N_points ) > 0.5
+    
+    wavelength_Arr = np.linspace( 1215.68 - 20 , 1215.68 + 20 , 1000 ) * 1e-10
+    
+    RUN_TEST_Lines = True
+    if RUN_TEST_Lines :
+        for Geo in Geometry_set:
+    
+            print '      Running : ' , Geo ,
+    
+            try:
+                qq = RT_Line_Profile( Geo , wavelength_Arr , V_Arr , logNH_Arr , 10**logta_Arr , Inside_Bicone_Arr=In_Arr )
+                assert np.sum( np.isnan( qq ) ) == 0
+                print '--> Success!!'
+    
+            except:
+                print '--> ERROR. HUMAN IS DEAD. MISMATCH!!'
+
+    return
 #====================================================================#
+#====================================================================#
+#====================================================================#
+#====================================================================#
+#====================================================================#
+def Test_2( ):
+
+    from pylab import *
+
+    print '\n Let us make some plots. This will show you just a glimpse of what LyaRT;Grid can do. Just wait for it...'
+
+    # Plot some nice line profiles
+
+    print '\n    Plotting some line profiles...'
+
+    wavelength_Arr = np.linspace( 1215.68 - 20 , 1215.68 + 20 , 1000 ) * 1e-10
+
+    V_Arr = np.array( [ 10 , 50 , 100 , 200 , 300 ] )
+
+    logNH_Arr = np.array( [ 20.0 ] * len( V_Arr ) )
+
+    logta_Arr = np.array( [ -1. ] * len( V_Arr ) )
+
+    Inside_Bicone_Arr = np.zeros( len(V_Arr) ) == 0
+
+    cm = get_cmap( 'rainbow' )
+    
+    for geo in [ 'Thin_Shell' , 'Galactic_Wind' , 'Bicone_X_Slab' ]:
+
+        qq = RT_Line_Profile( geo , wavelength_Arr , V_Arr , logNH_Arr , 10.**logta_Arr , Inside_Bicone_Arr=Inside_Bicone_Arr ) 
+
+        figure()
+
+        ax_ax = subplot(111)
+
+        for i in range( 0 ,len( V_Arr ) ):
+
+            ax_ax.plot( wavelength_Arr*1e10 , qq[i] , color=cm( i*1./( len(V_Arr) -1 ) ) , label=r'$\rm V_{exp} = '+ str(V_Arr[i]) +'km/s$ ' , lw=2 )
+
+        texto = r'$\rm N_{H} = 10^{20} cm^{-2}$' + '\n' + r'$\rm \tau_{a} = 0.1$'
+
+        ax_ax.text( .95 , 0.45 , texto , verticalalignment='top', horizontalalignment='right', transform=ax_ax.transAxes, fontsize=20 )
+        
+        ax_ax.set_title( r'$\rm Geometry = $' + geo , size=20 )
+
+        ax_ax.set_ylabel( r'$\rm Flux [a.u.]$' , size=20 )
+        ax_ax.set_xlabel( r'$\rm Wavelength [\AA]$' , size=20 )
+
+        ax_ax.set_xlim( 1212.5 , 1222.5 )
+
+        ax_ax.legend(loc=0)
+
+    print '\n    Plotting some escape fractions...'
+
+    logta_Arr = np.linspace( -2 , 0.5 , 20 )
+
+    logNH_Arr = [20.0] * len( logta_Arr )
+
+    for geo in [ 'Thin_Shell' , 'Galactic_Wind' , 'Bicone_X_Slab' ]  :
+
+        figure()
+
+        ax_ax = subplot(111)
+
+        for i in range( 0 , len(V_Arr) ):
+
+            V_Arr_tmp = [ V_Arr[i] ] * len( logta_Arr )
+
+            Inside_Bicone_Arr = np.zeros( len( logta_Arr ) ) == 0
+
+            f_esc = RT_f_esc( geo , V_Arr_tmp , logNH_Arr , 10**logta_Arr , Inside_Bicone_Arr=Inside_Bicone_Arr)
+        
+            ax_ax.plot( logta_Arr , f_esc , color=cm( i*1./( len(V_Arr) -1 ) ) , label=r'$\rm V_{exp} = '+ str(V_Arr[i]) +'km/s$ ' , lw=2 )
+
+            Inside_Bicone_Arr = np.zeros( len( logta_Arr ) ) == 1
+
+            f_esc = RT_f_esc( geo , V_Arr_tmp , logNH_Arr , 10**logta_Arr , Inside_Bicone_Arr=Inside_Bicone_Arr)
+
+            ax_ax.semilogy( logta_Arr , f_esc , '--' , color=cm( i*1./( len(V_Arr) -1 ) ) , lw=2 )
+
+        ax_ax.set_xlabel( r'$\rm \log \tau_a$' , size=20 )
+        ax_ax.set_ylabel( r'$f_{\rm esc} ^{\rm Ly \alpha} $' , size=20 )
+
+        texto = r'$\rm N_{H} = 10^{20} cm^{-2}$'
+
+        ax_ax.text( .5 , 0.05 , texto , verticalalignment='bottom', horizontalalignment='left', transform=ax_ax.transAxes, fontsize=20 )
+
+        ax_ax.set_title( r'$\rm Geometry = $' + geo , size=20 )
+
+        legend( loc=0 )
+
+    show()
+
+    return
+#====================================================================#
+#====================================================================#
+#====================================================================#
+#====================================================================#
+#====================================================================#
+def Test_Installation( Make_Plots=True ):
+
+    import warnings
+    warnings.filterwarnings("ignore")
+
+    Test_1()
+
+    if Make_Plots : Test_2()
+
+    return
+#====================================================================#
+#====================================================================#
+#====================================================================#
+#====================================================================#
+#====================================================================#
+
 if __name__ == '__main__':
     pass
 

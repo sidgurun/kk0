@@ -34,8 +34,22 @@ in it.
 
 Please, note that you should have about 1GB of free memory in you machine in order to install `LyaRT_Grid`. Also note that as ~1GB of data has to be downloaded it might take some time depending on your internet conection.
 
-I don't like short installation guides, but really, there is nothing more to tell. However, if you find any trouble with installation please contact `sidgurung@cefca.es` or leave a comment. We will be pleased to help you! 
- 
+In most of the machines we have tested `LyaRT;Grid` this procedure was enought to get a proper installation. However, let's check that everything is working properly. The best way of doing this is opening a `python`/`ipython` terminal and execute:
+
+```python
+import LyaRT_Grid as Lya
+
+Lya.Test_Installation( Make_Plots = True )
+```
+
+This function checks if the pip installation downloaded everything. Then, if the data files are nor found it tries to download them (this requaries internet conection). After Checking that you have got the data in your machine `LyaRT_Grid` will check that everyhting works smoothly. For this some escape fractions and line profiles will be computes. The status of the operation should appear in the screen. Everything should get a `Succsess!!`. The only exception is 
+
+`Running :  Bicone_X_Slab Analytic --> ERROR. HUMAN IS DEAD. MISMATCH!!`
+
+Do not worry. The only reason why you are getting this error is because this algorithm is not implemented yet. Then the function will produce some plots. In case you want to run the tests without plotting just set `Make_Plots = False`  when calling the `Lya.Test_Installation`.
+
+This should be all in the installation. If you find any trouble/bug duruing it, please, contact us at `sidgurung@cefca.es`.Thank you for being patience.
+
 ## Hands on the code.
 
 ( Assuming everything went smoothly in the installation... )
@@ -107,7 +121,7 @@ Inside_Bicone_Arr = np.random.rand( len(V_Arr) ) < Area_in_bicone
 f_esc_Arr = Lya.RT_f_esc( Geometry , V_Arr , logNH_Arr , ta_Arr , Inside_Bicone_Arr=Inside_Bicone_Arr ) 
 ```  
 
-#### Deeper options on predictint the escape fraction (Unuseful section?).
+#### Deeper options on predicting the escape fraction (Unuseful section?).
 
 There are many algorithims implemented to compute `f_esc_Arr` and by default `LyaRT;Grid` uses machine learning decision tree regressor and a parametric equation for the escape fraction as a function of the dust optical depth (Go to the `LyaRT;Grid` presentation paper Gurung-Lopez et al. in prerp for more information). These settings were chosen as default since they give the best performance. However the user might want to change the computing algorithim so here there is a guide with all the options available.
 
