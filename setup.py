@@ -4,21 +4,19 @@ from setuptools.command.develop import develop
 from setuptools.command.install import install
 
 import LyaRT_Grid as LG
-
 #====================================================================#
 
 class PostDevelopCommand(develop):
     """Post-installation for development mode."""
     def run(self):
-        # PUT YOUR POST-INSTALL SCRIPT HERE or CALL A FUNCTION
         LG.Download_data()
 
         develop.run(self)
 
+
 class PostInstallCommand(install):
     """Post-installation for installation mode."""
     def run(self):
-        # PUT YOUR POST-INSTALL SCRIPT HERE or CALL A FUNCTION
         LG.Download_data()
 
         install.run(self)
