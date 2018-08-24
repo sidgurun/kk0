@@ -1,6 +1,7 @@
 import os
-
 import os.path
+
+#import imp
 
 import sys
 import shutil
@@ -8,6 +9,8 @@ import shutil
 import urllib
 
 import numpy as np
+
+
 
 try:
     from sklearn.ensemble import RandomForestRegressor, ExtraTreesRegressor, GradientBoostingRegressor
@@ -48,13 +51,14 @@ def Download_data():
 
     this_dir, this_filename = os.path.split(__file__)
 
-    file_were_to_store_data = this_dir + '/DATA/'
+    arxiv_with_file_names = this_dir + '/DATA/List_of_DATA_files'
+
+    file_where_to_store_data = this_dir + '/DATA/'
 
     print( 'This package is stored in ', this_dir , '(Please, note that we are not spying you.)' )
 
     http_url = 'http://www.cefca.es/people/~sidgurung/ShouT/ShouT/DATA/'
 
-    arxiv_with_file_names = this_dir + '/DATA/List_of_DATA_files'
 
     testfile = urllib.URLopener()
 
@@ -70,9 +74,9 @@ def Download_data():
 
             print( '--> Done!' )
 
-            print( 'Moving Downloaded file to' , file_were_to_store_data )
+            print( 'Moving Downloaded file to' , file_where_to_store_data )
 
-            shutil.move( arxiv_name , file_were_to_store_data + arxiv_name )
+            shutil.move( arxiv_name , file_where_to_store_data + arxiv_name )
 
             print( '--> Done' )
 
