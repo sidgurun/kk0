@@ -10,13 +10,8 @@ import urllib
 
 import numpy as np
 
-
-
-try:
-    from sklearn.ensemble import RandomForestRegressor, ExtraTreesRegressor, GradientBoostingRegressor
-    from sklearn.neighbors import KNeighborsRegressor
-except:
-    print 'Unable to import sklearn!!'
+from sklearn.ensemble import RandomForestRegressor, ExtraTreesRegressor, GradientBoostingRegressor
+from sklearn.neighbors import KNeighborsRegressor
 
 import pickle
 

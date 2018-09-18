@@ -29,7 +29,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="LyaRT_Grid",
-    version="0.1.6",
+    version="0.1.7",
     author="Siddhartha Gurung Lopez",
     author_email="sidgurung@cefca.es",
     description="Fast Lyman alpha Radiative Transfer for everyone!",
