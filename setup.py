@@ -29,7 +29,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="LyaRT_Grid",
-    version="0.1.7",
+    version="0.1.8",
     author="Siddhartha Gurung Lopez",
     author_email="sidgurung@cefca.es",
     description="Fast Lyman alpha Radiative Transfer for everyone!",
@@ -37,7 +37,7 @@ setuptools.setup(
     long_description_content_type="text/markdown",
     url="https://github.com/sidgurun/LyaRT-Grid",
     packages=setuptools.find_packages(),
-    install_requires=setuptools.find_packages(),
+    install_requires=[ 'sklearn' ],
     include_package_data = True,
     classifiers=(
         "Programming Language :: Python :: 3",
