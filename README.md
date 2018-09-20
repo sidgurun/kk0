@@ -1,7 +1,9 @@
 # `LyaRT;Grid`
 
 In this Universe everything is neat, even stochasticity.
+
 Lyman alpha Resonant Scatter is dominated by random processes.
+
 Although there is chaos, there is also an order.
 
 ## WARNING : THIS IS BETA VERSION! BUGS EVERYWHERE, BE AWARE!
