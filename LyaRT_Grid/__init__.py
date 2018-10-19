@@ -674,8 +674,8 @@ def pre_treatment_f_esc( V_Arr , logNH_Arr , ta_Arr , Inside_Bicone_Arr , MODE )
     logNH_Arr_used[ bool1 * bool2 *~ bool_aux ] = 20.5
     #============================================#
 
-    bool5 = V_Arr_used <= 00.00 
-    V_Arr_used[ bool5 ] = 00.000001
+    bool5 = V_Arr_used <= 10.00 
+    V_Arr_used[ bool5 ] = 10.000001
 
     bool6 = V_Arr_used >= 1000
     V_Arr_used[ bool6 ] = 999.9999
@@ -726,25 +726,15 @@ def  RT_f_esc( Geometry , V_Arr , logNH_Arr , ta_Arr , Inside_Bicone_Arr=None , 
 
         V_Arr : 1-D sequence of float
                 Array with the expansion velocity of the outflow. The unit
-                are km/s. The Grid was computes between 40km/s and 1000km/s.
-                The code does not crash outside but it returns the grid closest
-                value.
-
+                are km/s. 
 
         logNH_Arr : 1-D sequence of float
                     Array with the logarithim of the outflow neutral hydrogen
                     column density. The units of the colum density are in c.g.s,
-                    i.e, cm**-2. The Grid was computed between logNH=17. and
-                    logNH=22. The code does not crash outside but it returns the
-                    grid closest value.
-
+                    i.e, cm**-2.
 
         ta_Arr : 1-D sequence of float
-                 Array with the dust optic depth of the outflow. The Grid
-                 was computed between ta=10**(-0.125) and ta=10*(-3.75).
-                 The code does not crash outside but it returns the grid
-                 closest value.
-
+                 Array with the dust optic depth of the outflow. 
 
         Inside_Bicone_Arr : optional 1-D sequence of bool
                             An Array with booleans, indicating if the bicone is face-on
@@ -974,7 +964,7 @@ def Interpolate_Lines_Arrays_3D_grid_MCMC( V_Value , logNH_Value , logta_Value ,
 #====================================================================#
 #====================================================================#
 #====================================================================#
-def pre_treatment_Line_profile_MCMC( V_Value , logNH_Value , ta_Value ):
+def pre_treatment_Line_profile_MCMC( Geometry , V_Value , logNH_Value , ta_Value ):
 
     bool1 = np.isfinite(     V_Value )
     bool2 = np.isfinite( logNH_Value )
@@ -982,18 +972,19 @@ def pre_treatment_Line_profile_MCMC( V_Value , logNH_Value , ta_Value ):
 
     Bool_good = bool1 * bool2 * bool3
 
-    if V_Value <= 100.0 and logNH_Value >= 20.5 :
+    if Geometry in [ 'Thin_Shell' , 'Bicone_X_Slab' ]:
+        if V_Value <= 100.0 and logNH_Value >= 20.5 :
 
-        #aux_V = logNH_Value*-40 + 920.
-        aux_V = logNH_Value * ( -100/1.5 ) + ( 100 - ( -100/1.5 * 20.5 ) )
+            #aux_V = logNH_Value*-40 + 920.
+            aux_V = logNH_Value * ( -100/1.5 ) + ( 100 - ( -100/1.5 * 20.5 ) )
 
-        bool_aux = V_Value > aux_V
+            bool_aux = V_Value > aux_V
 
-        if     bool_aux : V_Value = 100.0001
-        if not bool_aux : logNH_Value = 20.4999999
+            if     bool_aux : V_Value = 100.0001
+            if not bool_aux : logNH_Value = 20.4999999
 
 
-    if V_Value <=   00.0 : V_Value =  00.000001
+    if V_Value <=   10.0 : V_Value =  10.000001
     if V_Value >= 1000.0 : V_Value = 999.999999
 
     if logNH_Value <    17.0 : logNH_Value =  17.000001
@@ -1008,7 +999,7 @@ def pre_treatment_Line_profile_MCMC( V_Value , logNH_Value , ta_Value ):
 #====================================================================#
 #====================================================================#
 #====================================================================#
-def RT_Line_Profile_MCMC( wavelength_Arr , V_Value , logNH_Value , ta_Value , DATA_LyaRT ):
+def RT_Line_Profile_MCMC( Geometry , wavelength_Arr , V_Value , logNH_Value , ta_Value , DATA_LyaRT ):
 
     '''
         Return one and only one Lyman alpha line profile for a given outflow properties.
@@ -1027,22 +1018,15 @@ def RT_Line_Profile_MCMC( wavelength_Arr , V_Value , logNH_Value , ta_Value , DA
 
         V_Value : float
                   Value of the expansion velocity of the outflow. The unit
-                  are km/s. The Grid was computes between 40km/s and 1000km/s.
-                  The code does not crash outside but it returns the grid closest
-                  value.
+                  are km/s. 
 
         logNH_Value : float
                       Value of the logarithim of the outflow neutral hydrogen
                       column density. The units of the colum density are in c.g.s,
-                      i.e, cm**-2. The Grid was computed between logNH=17. and
-                      logNH=22. The code does not crash outside but it returns the
-                      grid closest value.
+                      i.e, cm**-2. 
 
         ta_Value : float
-                 Value of the dust optic depth of the outflow. The Grid
-                 was computed between ta=10**(-0.125) and ta=10*(-3.75).
-                 The code does not crash outside but it returns the grid
-                 closest value.
+                 Value of the dust optic depth of the outflow. 
 
         DATA_LyaRT : Dictionay
                      This dictonary have all the information of the grid.
@@ -1051,16 +1035,13 @@ def RT_Line_Profile_MCMC( wavelength_Arr , V_Value , logNH_Value , ta_Value , DA
 
                      DATA_LyaRT = load_Grid_Line( 'Thin_Shell' ) 
 
-
-            .. versionadded:: 0.0.3
-
         Returns
         -------
         lines_Arr : 1-D sequence of float
                     The Lyman alpha line profile. 
     '''
 
-    V_Value , logNH_Value , ta_Value , Bool_good = pre_treatment_Line_profile_MCMC( V_Value , logNH_Value , ta_Value )
+    V_Value , logNH_Value , ta_Value , Bool_good = pre_treatment_Line_profile_MCMC( Geometry , V_Value , logNH_Value , ta_Value )
 
     if Bool_good :
         logta_Value = np.log10( ta_Value )
@@ -1079,7 +1060,7 @@ def RT_Line_Profile_MCMC( wavelength_Arr , V_Value , logNH_Value , ta_Value , DA
 #====================================================================#
 #====================================================================#
 #====================================================================#
-def pre_treatment_Line_profile( V_Arr , logNH_Arr , ta_Arr , Inside_Bicone_Arr ):
+def pre_treatment_Line_profile( Geometry , V_Arr , logNH_Arr , ta_Arr , Inside_Bicone_Arr ):
 
     V_Arr     = np.atleast_1d(     V_Arr )
     logNH_Arr = np.atleast_1d( logNH_Arr )
@@ -1102,20 +1083,21 @@ def pre_treatment_Line_profile( V_Arr , logNH_Arr , ta_Arr , Inside_Bicone_Arr )
     ta_Arr_used    =    ta_Arr[ mask_good ]
 
     #============================================#
-    bool1 = V_Arr_used < 100.0
-    bool2 = logNH_Arr_used >= 20.5
+    if Geometry in ['Thin_Shell' , 'Bicone_X_Slab']:
+        bool1 = V_Arr_used < 100.0
+        bool2 = logNH_Arr_used >= 20.5
 
-    aux_V_arr = logNH_Arr_used * ( -100/1.5 ) + ( 100 - ( -100/1.5 * 20.5 ) )
+        aux_V_arr = logNH_Arr_used * ( -100/1.5 ) + ( 100 - ( -100/1.5 * 20.5 ) )
 
-    bool_aux = V_Arr_used > aux_V_arr
+        bool_aux = V_Arr_used > aux_V_arr
 
-    V_Arr_used[     bool1 * bool2 *  bool_aux ] = 100.000001
-    logNH_Arr_used[ bool1 * bool2 *~ bool_aux ] = 20.499999
+        V_Arr_used[     bool1 * bool2 *  bool_aux ] = 100.000001
+        logNH_Arr_used[ bool1 * bool2 *~ bool_aux ] = 20.499999
     #============================================#
 
 
-    bool5 = V_Arr_used <= 0
-    V_Arr_used[ bool5 ] = 00.000001
+    bool5 = V_Arr_used <= 10
+    V_Arr_used[ bool5 ] = 10.000001
 
     bool6 = V_Arr_used >= 1000
     V_Arr_used[ bool6 ] = 999.9999
@@ -1163,22 +1145,15 @@ def RT_Line_Profile( Geometry , wavelength_Arr , V_Arr , logNH_Arr , ta_Arr , In
         
         V_Arr : 1-D sequence of float 
                 Array with the expansion velocity of the outflow. The unit
-                are km/s. The Grid was computes between 40km/s and 1000km/s.
-                The code does not crash outside but it returns the grid closest 
-                value.
+                are km/s. 
         
         logNH_Arr : 1-D sequence of float
                     Array with the logarithim of the outflow neutral hydrogen 
                     column density. The units of the colum density are in c.g.s,
-                    i.e, cm**-2. The Grid was computed between logNH=17. and 
-                    logNH=22. The code does not crash outside but it returns the 
-                    grid closest value.
+                    i.e, cm**-2. 
         
         ta_Arr : 1-D sequence of float
-                 Array with the dust optic depth of the outflow. The Grid 
-                 was computed between ta=10**(-0.125) and ta=10*(-3.75). 
-                 The code does not crash outside but it returns the grid 
-                 closest value.
+                 Array with the dust optic depth of the outflow. 
 
         Inside_Bicone_Arr : optional 1-D sequence of bool
                             This is useless if the geometry is not Bicone_X_Slab.
@@ -1207,7 +1182,7 @@ def RT_Line_Profile( Geometry , wavelength_Arr , V_Arr , logNH_Arr , ta_Arr , In
 
     lines_Arr = np.zeros( len(V_Arr) * len( x_Arr ) ).reshape( len(V_Arr) , len( x_Arr ) ) * np.nan
        
-    V_Arr_used , logNH_Arr_used , ta_Arr_used , In_Bool_used , mask_good = pre_treatment_Line_profile( V_Arr , logNH_Arr , ta_Arr , Inside_Bicone_Arr )
+    V_Arr_used , logNH_Arr_used , ta_Arr_used , In_Bool_used , mask_good = pre_treatment_Line_profile( Geometry , V_Arr , logNH_Arr , ta_Arr , Inside_Bicone_Arr )
 
 
     logta_Arr_used = np.log10( ta_Arr_used )
